@@ -44,3 +44,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, version 3 of the License.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+### Commercial Use
+
+For commercial or proprietary use of this software, explicit written authorization is required. See [COMMERCIAL_USE.md](./COMMERCIAL_USE.md) for details on the approval process and requirements.
