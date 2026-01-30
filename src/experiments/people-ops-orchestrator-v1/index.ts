@@ -33,9 +33,9 @@
  * - adapters/     : Replaceable implementations (ReactFlow, etc.)
  */
 
-export { CommunicationIntent, CommunicationChannel, Audience } from './domain/CommunicationIntent';
-export { FlowDefinition } from './domain/FlowDefinition';
+export type { CommunicationIntent, CommunicationChannel, Audience } from './domain/CommunicationIntent';
+export type { FlowDefinition } from './domain/FlowDefinition';
 export { validateFlow } from './domain/validateFlow';
 export { OrchestratorAPI } from './api/OrchestratorAPI';
-export { CommunicationPort } from './ports/CommunicationPort';
+export type { CommunicationPort } from './ports/CommunicationPort';
 export { PeopleOpsFlowCanvas } from './adapters/reactflow/PeopleOpsFlowCanvas';
