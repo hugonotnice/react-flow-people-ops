@@ -33,166 +33,106 @@ const palette = {
   slate: "text-slate-300 bg-slate-700 border-slate-700"
 } as const;
 
-const TriggerNode: React.FC<NodeProps> = ({ data, selected }) => {
-  return (
-    <div
-      className={`node-card rounded-xl px-4 py-3 w-[180px] border ${selected ? "border-primary shadow-glow" : "border-white/10"
-        }`}
-    >
-      <Handle type="source" position={Position.Right} style={{ opacity: 0 }} />
-      <div className="flex items-center gap-2 mb-2">
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${palette.orange}`}>
-          <span className="material-symbols-outlined text-lg">touch_app</span>
-        </div>
-        <span className="text-[10px] font-bold text-orange-400 uppercase tracking-wider">Trigger</span>
-      </div>
-      <div className="text-sm font-semibold text-white">{data.label}</div>
-      <div className="text-[10px] text-slate-500 mt-1">{data.subtitle}</div>
-    </div>
-  );
-};
-
-const ActionNode: React.FC<NodeProps> = ({ data, selected }) => {
-  const accent = data.accent as keyof typeof palette;
+const JourneyNode: React.FC<NodeProps> = ({ data, selected }) => {
   return (
     <div
       className={`node-card rounded-xl px-4 py-3 w-[200px] border-l-4 ${selected ? "border-primary shadow-glow" : "border-white/10"
         }`}
-      style={{ borderLeftColor: data.borderColor || "#334155" }}
+      style={{ borderLeftColor: "#6366f1" }}
     >
       <Handle type="target" position={Position.Left} style={{ opacity: 0 }} />
       <Handle type="source" position={Position.Right} style={{ opacity: 0 }} />
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
-          <span className={`material-symbols-outlined ${palette[accent]} text-lg`}> {data.icon} </span>
-          <span className={`text-[10px] font-bold uppercase tracking-wider ${palette[accent]} bg-transparent border-0`}>
-            {data.typeLabel}
-          </span>
+      <div className="flex items-center gap-2 mb-2">
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${palette.indigo}`}>
+          <span className="material-symbols-outlined text-lg">rocket_launch</span>
         </div>
-        {data.active && <div className="w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>}
+        <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">Start Journey</span>
       </div>
       <div className="text-sm font-semibold text-white">{data.label}</div>
-      {data.template && <div className="text-[10px] text-slate-500 mt-2 truncate">{data.template}</div>}
+      <div className="text-[10px] text-slate-500 mt-1">ID: {data.journeyId || 'Not set'}</div>
     </div>
   );
 };
 
-const ConditionalNode: React.FC<NodeProps> = ({ data }) => {
+const TagSwitchNode: React.FC<NodeProps> = ({ data, selected }) => {
   return (
-    <div className="relative w-[160px] h-[160px] flex items-center justify-center">
+    <div
+      className={`node-card rounded-xl px-4 py-3 w-[220px] border-l-4 ${selected ? "border-primary shadow-glow" : "border-white/10"
+        }`}
+      style={{ borderLeftColor: "#8b5cf6" }}
+    >
       <Handle type="target" position={Position.Left} style={{ opacity: 0 }} />
       <Handle type="source" position={Position.Right} style={{ opacity: 0 }} />
-      <Handle type="source" position={Position.Bottom} style={{ opacity: 0 }} />
-      <div className="w-[120px] h-[120px] bg-slate-900 triangle-node flex items-end justify-center pb-4 shadow-glow relative">
-        <div className="absolute inset-0 bg-gradient-to-t from-purple-900/40 to-transparent pointer-events-none"></div>
-        <div className="absolute inset-0 triangle-node border-b-4 border-purple-500 bg-purple-500/10"></div>
-        <span className="material-symbols-outlined text-purple-400 text-4xl mb-2 relative z-10 drop-shadow-lg">
-          call_split
-        </span>
+      <div className="flex items-center gap-2 mb-2">
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${palette.purple}`}>
+          <span className="material-symbols-outlined text-lg">sell</span>
+        </div>
+        <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider">Tag Switch</span>
       </div>
-      <div className="absolute -bottom-4 bg-slate-800/90 backdrop-blur px-3 py-1.5 rounded-full border border-purple-500/30 shadow-lg">
-        <span className="text-xs font-bold text-purple-300 whitespace-nowrap">{data.label}</span>
-      </div>
-      <div className="absolute top-0 right-0 bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30 text-[10px] font-bold shadow-[0_0_10px_rgba(16,185,129,0.2)] backdrop-blur-sm transform translate-x-4">
-        TRUE
-      </div>
-      <div className="absolute bottom-2 right-0 bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full border border-red-500/30 text-[10px] font-bold shadow-[0_0_10px_rgba(239,68,68,0.2)] backdrop-blur-sm transform translate-x-4">
-        FALSE
-      </div>
-    </div>
-  );
-};
-
-const DelayNode: React.FC<NodeProps> = ({ data }) => {
-  return (
-    <div className="relative w-[160px] h-[120px] flex items-center justify-center">
-      <Handle type="target" position={Position.Left} style={{ opacity: 0 }} />
-      <Handle type="source" position={Position.Right} style={{ opacity: 0 }} />
-      <div className="w-[88px] h-[88px] bg-slate-900 hexagon-node flex items-center justify-center shadow-lg relative">
-        <div className="absolute inset-0 bg-amber-500/10 hexagon-node"></div>
-        <div className="absolute inset-0 border-2 border-amber-500/50 hexagon-node"></div>
-        <span className="material-symbols-outlined text-amber-400 text-2xl drop-shadow-md">hourglass_bottom</span>
-      </div>
-      <div className="absolute -bottom-4 bg-slate-800/90 px-3 py-1 rounded-full border border-amber-500/30 shadow-lg backdrop-blur-sm">
-        <span className="text-xs font-bold text-amber-300">{data.label}</span>
+      <div className="text-sm font-semibold text-white">Switch: {data.switchField || 'tag'}</div>
+      <div className="mt-2 space-y-1">
+        {data.cases ? Object.keys(data.cases).map(tag => (
+          <div key={tag} className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-purple-500"></span>
+            <span className="text-[10px] text-slate-400 font-mono">{tag}</span>
+          </div>
+        )) : <span className="text-[10px] text-slate-500 italic">No tags configured</span>}
       </div>
     </div>
   );
 };
 
 const nodeTypes = {
-  trigger: TriggerNode,
-  action: ActionNode,
-  conditional: ConditionalNode,
-  delay: DelayNode
+  journey: JourneyNode,
+  tagSwitch: TagSwitchNode,
 };
 
 type WorkflowNodeData = {
   label: string;
-  subtitle?: string;
-  typeLabel?: string;
-  icon?: string;
-  template?: string;
-  accent?: keyof typeof palette;
-  borderColor?: string;
-  active?: boolean;
+  journeyId?: string;
+  switchField?: string;
+  cases?: Record<string, string>;
+  offset?: number;
+  executionHour?: number;
+  executionMinute?: number;
 };
 
 const initialNodes: Node<WorkflowNodeData>[] = [
   {
-    id: "trigger-1",
-    type: "trigger",
-    position: { x: 80, y: 240 },
-    data: { label: "HR Announcement", subtitle: "User initiated" }
-  },
-  {
-    id: "conditional-1",
-    type: "conditional",
-    position: { x: 520, y: 210 },
-    data: { label: "Check: Active Status" }
-  },
-  {
-    id: "action-1",
-    type: "action",
-    position: { x: 880, y: 80 },
+    id: "node-1",
+    type: "tagSwitch",
+    position: { x: 100, y: 300 },
     data: {
-      label: "Send Policy Update",
-      typeLabel: "Slack",
-      icon: "chat",
-      template: "Template: #policy-update-v2",
-      accent: "blue",
-      active: true,
-      borderColor: "#10b981"
+      label: "User Interest Check",
+      switchField: "user_tag",
+      cases: { "vip": "VIP Flow", "standard": "Regular Flow" },
+      offset: 0,
+      executionHour: 9,
+      executionMinute: 0
     }
   },
   {
-    id: "delay-1",
-    type: "delay",
-    position: { x: 1220, y: 90 },
-    data: { label: "3 Days" }
-  },
-  {
-    id: "action-2",
-    type: "action",
-    position: { x: 1520, y: 90 },
+    id: "node-2",
+    type: "journey",
+    position: { x: 450, y: 150 },
     data: {
-      label: "Reminder: Policy",
-      typeLabel: "Email",
-      icon: "mail",
-      accent: "indigo",
-      borderColor: "#6366f1"
+      label: "Exclusive Offers",
+      journeyId: "journey_vip_001",
+      offset: 1,
+      executionHour: 10,
+      executionMinute: 30
     }
   },
   {
-    id: "action-3",
-    type: "action",
-    position: { x: 880, y: 420 },
+    id: "node-3",
+    type: "journey",
+    position: { x: 450, y: 450 },
     data: {
-      label: "Log: Inactive User",
-      typeLabel: "End",
-      icon: "do_not_disturb_on",
-      accent: "slate",
-      borderColor: "#64748b"
+      label: "Onboarding Sequence",
+      journeyId: "journey_std_001",
+      offset: 0,
+      executionHour: 14,
+      executionMinute: 0
     }
   }
 ];
@@ -200,37 +140,17 @@ const initialNodes: Node<WorkflowNodeData>[] = [
 const initialEdges: Edge[] = [
   {
     id: "e1-2",
-    source: "trigger-1",
-    target: "conditional-1",
-    style: { stroke: "#475569", strokeWidth: 2 }
+    source: "node-1",
+    target: "node-2",
+    label: "VIP",
+    style: { stroke: "#8b5cf6", strokeWidth: 2 }
   },
   {
-    id: "e2-3",
-    source: "conditional-1",
-    target: "action-1",
-    label: "TRUE",
-    style: { stroke: "#10b981", strokeWidth: 2, strokeDasharray: "6 4" },
-    labelStyle: { fill: "#10b981", fontSize: 10 }
-  },
-  {
-    id: "e2-4",
-    source: "conditional-1",
-    target: "action-3",
-    label: "FALSE",
-    style: { stroke: "#ef4444", strokeWidth: 2, strokeDasharray: "6 4" },
-    labelStyle: { fill: "#ef4444", fontSize: 10 }
-  },
-  {
-    id: "e3-4",
-    source: "action-1",
-    target: "delay-1",
-    style: { stroke: "#475569", strokeWidth: 2 }
-  },
-  {
-    id: "e4-5",
-    source: "delay-1",
-    target: "action-2",
-    style: { stroke: "#475569", strokeWidth: 2 }
+    id: "e1-3",
+    source: "node-1",
+    target: "node-3",
+    label: "STANDARD",
+    style: { stroke: "#8b5cf6", strokeWidth: 2 }
   }
 ];
 
@@ -304,18 +224,70 @@ const FlowCanvas: React.FC<{
                   onChange={(event) => updateSelectedNode({ label: event.target.value })}
                 />
               </div>
-              {selectedNode.data.template !== undefined && (
+
+              {selectedNode.type === 'journey' && (
                 <div>
                   <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
-                    Template
+                    Journey Identifier
                   </label>
                   <input
                     className="w-full px-3 py-2 bg-slate-800/50 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500"
-                    value={selectedNode.data.template}
-                    onChange={(event) => updateSelectedNode({ template: event.target.value })}
+                    value={selectedNode.data.journeyId || ''}
+                    onChange={(event) => updateSelectedNode({ journeyId: event.target.value })}
+                    placeholder="e.g. welcome_flow_01"
                   />
                 </div>
               )}
+
+              {selectedNode.type === 'tagSwitch' && (
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+                    Switch Field (Tag)
+                  </label>
+                  <input
+                    className="w-full px-3 py-2 bg-slate-800/50 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500"
+                    value={selectedNode.data.switchField || ''}
+                    onChange={(event) => updateSelectedNode({ switchField: event.target.value })}
+                    placeholder="e.g. loyalty_tier"
+                  />
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+                    Offset (Days)
+                  </label>
+                  <input
+                    type="number"
+                    className="w-full px-3 py-2 bg-slate-800/50 border border-white/10 rounded-lg text-sm text-white focus:outline-none"
+                    value={selectedNode.data.offset || 0}
+                    onChange={(event) => updateSelectedNode({ offset: parseInt(event.target.value) })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+                    Time (UTC)
+                  </label>
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      className="w-full px-2 py-2 bg-slate-800/50 border border-white/10 rounded-lg text-sm text-white"
+                      value={selectedNode.data.executionHour || 0}
+                      onChange={(event) => updateSelectedNode({ executionHour: parseInt(event.target.value) })}
+                      min="0" max="23"
+                    />
+                    <span className="text-white">:</span>
+                    <input
+                      type="number"
+                      className="w-full px-2 py-2 bg-slate-800/50 border border-white/10 rounded-lg text-sm text-white"
+                      value={selectedNode.data.executionMinute || 0}
+                      onChange={(event) => updateSelectedNode({ executionMinute: parseInt(event.target.value) })}
+                      min="0" max="59"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -362,23 +334,23 @@ const AppContent: React.FC = () => {
 
   // Effect to validate flow whenever nodes change
   React.useEffect(() => {
-    const intents: CommunicationIntent[] = nodes
-      .filter(n => n.type === 'action')
-      .map(n => ({
-        id: n.id,
-        channel: (n.data.typeLabel?.toLowerCase() as any) || 'email',
-        audience: 'employee',
-        messageTemplate: n.data.template || ''
-      }));
+    // Basic validation: ensure all nodes have required fields
+    const errors: string[] = [];
+    nodes.forEach(node => {
+      if (node.type === 'journey' && !node.data.journeyId) {
+        errors.push(`Journey node "${node.data.label}" missing Journey ID`);
+      }
+      if (node.type === 'tagSwitch' && !node.data.switchField) {
+        errors.push(`Tag Switch "${node.data.label}" missing Switch Field`);
+      }
+    });
 
-    const flow: FlowDefinition = {
-      id: 'current-flow',
-      name: 'Active Workflow',
-      intents
-    };
+    if (nodes.length === 0) {
+      errors.push("Template must contain at least one action");
+    }
 
-    setValidationErrors(orchestrator.validateFlow(flow));
-  }, [nodes, orchestrator]);
+    setValidationErrors(errors);
+  }, [nodes]);
 
   return (
     <div className="min-h-screen w-full flex flex-col bg-canvas text-slate-300 selection:bg-primary selection:text-white overflow-hidden">
@@ -454,73 +426,47 @@ const AppContent: React.FC = () => {
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-6 no-scrollbar">
             <section>
-              <h3 className="text-[10px] font-bold text-slate-500 mb-3 uppercase tracking-wider">Triggers</h3>
-              <button
-                className="w-full text-left p-3 bg-slate-800/40 border border-white/5 rounded-xl flex items-center gap-3 hover:bg-slate-700/60 transition-colors group"
-                onClick={() => addWorkflowNode("trigger", { label: "Manual Trigger", subtitle: "User initiated" })}
-              >
-                <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-transform group-active:scale-95 ${palette.orange}`}>
-                  <span className="material-symbols-outlined text-xl">bolt</span>
-                </div>
-                <div>
-                  <span className="text-sm font-medium text-slate-200 block">Manual Trigger</span>
-                  <span className="text-[10px] text-slate-500">User initiated</span>
-                </div>
-              </button>
-            </section>
-            <section>
-              <h3 className="text-[10px] font-bold text-slate-500 mb-3 uppercase tracking-wider">Logic &amp; Flow</h3>
-              <div className="space-y-2">
+              <h3 className="text-[10px] font-bold text-slate-500 mb-3 uppercase tracking-wider">Template Actions</h3>
+              <div className="space-y-3">
                 <button
                   className="w-full text-left p-3 bg-slate-800/40 border border-white/5 rounded-xl flex items-center gap-3 hover:bg-slate-700/60 transition-colors group"
-                  onClick={() => addWorkflowNode("conditional", { label: "Condition" })}
+                  onClick={() => addWorkflowNode("journey", {
+                    label: "New Journey Flow",
+                    journeyId: "",
+                    offset: 0,
+                    executionHour: 9,
+                    executionMinute: 0
+                  })}
                 >
-                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-transform group-active:scale-95 ${palette.purple}`}>
-                    <span className="material-symbols-outlined text-xl">call_split</span>
+                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-transform group-active:scale-95 ${palette.indigo}`}>
+                    <span className="material-symbols-outlined text-xl">rocket_launch</span>
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-slate-200 block">Conditional</span>
-                    <span className="text-[10px] text-slate-500">Branching logic</span>
+                    <span className="text-sm font-medium text-slate-200 block">Start Journey</span>
+                    <span className="text-[10px] text-slate-500">External Flow Trigger</span>
                   </div>
                 </button>
+
                 <button
                   className="w-full text-left p-3 bg-slate-800/40 border border-white/5 rounded-xl flex items-center gap-3 hover:bg-slate-700/60 transition-colors group"
-                  onClick={() => addWorkflowNode("delay", { label: "2 Days" })}
+                  onClick={() => addWorkflowNode("tagSwitch", {
+                    label: "Evaluate Tag",
+                    switchField: "tag",
+                    cases: {},
+                    offset: 0,
+                    executionHour: 9,
+                    executionMinute: 0
+                  })}
                 >
-                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-transform group-active:scale-95 ${palette.warning}`}>
-                    <span className="material-symbols-outlined text-xl">hourglass_empty</span>
+                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-transform group-active:scale-95 ${palette.purple}`}>
+                    <span className="material-symbols-outlined text-xl">sell</span>
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-slate-200 block">Delay</span>
-                    <span className="text-[10px] text-slate-500">Wait for duration</span>
+                    <span className="text-sm font-medium text-slate-200 block">Tag Switch</span>
+                    <span className="text-[10px] text-slate-500">Property Comparison</span>
                   </div>
                 </button>
               </div>
-            </section>
-            <section>
-              <h3 className="text-[10px] font-bold text-slate-500 mb-3 uppercase tracking-wider">Actions</h3>
-              <button
-                className="w-full text-left p-3 bg-slate-800/40 border border-white/5 rounded-xl flex items-center gap-3 hover:bg-slate-700/60 transition-colors group"
-                onClick={() =>
-                  addWorkflowNode("action", {
-                    label: "Send Message",
-                    typeLabel: "Slack",
-                    icon: "chat",
-                    template: "Template: #message",
-                    accent: "blue",
-                    active: true,
-                    borderColor: "#6366f1"
-                  })
-                }
-              >
-                <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-transform group-active:scale-95 ${palette.blue}`}>
-                  <span className="material-symbols-outlined text-xl">send</span>
-                </div>
-                <div>
-                  <span className="text-sm font-medium text-slate-200 block">Send Message</span>
-                  <span className="text-[10px] text-slate-500">Slack / Email</span>
-                </div>
-              </button>
             </section>
           </div>
         </aside>
